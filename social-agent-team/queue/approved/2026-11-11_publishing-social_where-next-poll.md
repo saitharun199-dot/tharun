@@ -3,7 +3,9 @@ department: publishing-social
 channel: YouTube community post
 scheduled_for: 2026-11-11 20:00
 risk: low
-needs_owner: yes   # strict approval bar
+needs_owner: no
+approved_by: owner
+approved_at: 2026-11-05 17:06
 cost: 0
 canva_link: 
 ---

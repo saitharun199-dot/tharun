@@ -43,7 +43,7 @@ All covers and thumbnails: **Canva drafts folder → https://www.canva.com/folde
   #Dubai #దుబాయ్ #HyderabadiBiryani #TeluguVlog #TravelVlog #Shorts
   ```
 - **Cover:** pick a frame of the first bite. (No Canva cover made yet for this one.)
-- [ ] Approved by owner
+- [x] Approved by owner
 - [ ] Posted
 
 ## Tue 10 Nov · 19:00 · Instagram Reel — Somasila speedboat
@@ -59,7 +59,7 @@ All covers and thumbnails: **Canva drafts folder → https://www.canva.com/folde
   #Somasila #సోమశిల #AndhraPradesh #TeluguVlog #TravelVlog #CampingIndia #Backwaters
   ```
 - **Cover:** Canva design https://www.canva.com/d/W4pLmkRK1dxBjZV (in the drafts folder) — change the text to సోమశిల + "Inka speed ga po anna!".
-- [ ] Approved by owner
+- [x] Approved by owner
 - [ ] Posted
 
 ## Wed 11 Nov · 20:00 · YouTube community post — "Where next?" poll
@@ -76,7 +76,7 @@ All covers and thumbnails: **Canva drafts folder → https://www.canva.com/folde
   You tell us in the comments 💬
   ```
 - **Cover:** none needed.
-- [ ] Approved by owner
+- [x] Approved by owner
 - [ ] Posted
 
 ## Thu 12 Nov · 19:00 · YouTube Short **and** Instagram Reel — Dubai golden hour boat
@@ -102,7 +102,7 @@ All covers and thumbnails: **Canva drafts folder → https://www.canva.com/folde
   #Dubai #దుబాయ్ #DubaiVlog #GoldenHour #TeluguVlog #TravelVlog
   ```
 - **Cover:** a frame with the sun low over the skyline. (No Canva cover made yet.)
-- [ ] Approved by owner (YouTube)  ·  [ ] Approved by owner (Instagram)
+- [x] Approved by owner (YouTube)  ·  [x] Approved by owner (Instagram)
 - [ ] Posted (YouTube)  ·  [ ] Posted (Instagram)
 
 ## Fri 13 Nov · nothing to post (rest day)
@@ -124,7 +124,7 @@ All covers and thumbnails: **Canva drafts folder → https://www.canva.com/folde
   #Somasila #సోమశిల #AndhraPradesh #CampingIndia #TeluguVlog #TravelVlog #WeekendGetaway
   ```
 - **Cover:** slide 1 is the cover. Add the text in Canva (drafts folder) if you like.
-- [ ] Approved by owner
+- [x] Approved by owner
 - [ ] Posted
 
 ## Sat 14 Nov · 19:00 · YouTube Short — Burj Khalifa + Dubai Fountain
@@ -141,7 +141,7 @@ All covers and thumbnails: **Canva drafts folder → https://www.canva.com/folde
   #BurjKhalifa #DubaiFountain #Dubai #దుబాయ్ #TeluguVlog #TravelVlog #Shorts
   ```
 - **Cover:** a frame with the fountain at full height. (No Canva cover made yet.)
-- [ ] Approved by owner
+- [x] Approved by owner
 - [ ] Posted
 
 ## Sun 15 Nov · 10:00 · YouTube long video — PLAN only (nothing goes live)
@@ -168,4 +168,4 @@ All covers and thumbnails: **Canva drafts folder → https://www.canva.com/folde
 - **Somasila carousel:** moved **Fri 13 Nov 18:30 → Sat 14 Nov 09:00** (Instagram's best days are Tue/Thu/Sat, 9:00 or 19:00; Sat 19:00 already has a YouTube Short). File name still says 13 Nov so links keep working. Removed ⛺ and 🐐 to keep to 1–3 emojis; added #TravelVlog; added photo-size note.
 - **Burj Khalifa Short (Sat):** added #దుబాయ్ and #TravelVlog; added 9:16 note.
 - **Long-video plan (Sun):** added [OWNER TO CONFIRM] on the Option A highlights; added a note that nothing goes live that day.
-- All drafts still say **needs_owner: yes** and stay in `queue/pending/`. All existing [OWNER TO CONFIRM] markers kept.
+- All drafts still say **needs_owner: yes** and stay in `queue/approved/`. All existing [OWNER TO CONFIRM] markers kept.

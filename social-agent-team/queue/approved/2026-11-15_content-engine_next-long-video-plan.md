@@ -3,7 +3,9 @@ department: content-engine
 channel: YouTube long video (plan)
 scheduled_for: 2026-11-15 10:00
 risk: low
-needs_owner: yes   # strict approval bar
+needs_owner: no
+approved_by: owner
+approved_at: 2026-11-05 17:06
 cost: 0
 canva_link: https://www.canva.com/d/W4pLmkRK1dxBjZV
 ---
