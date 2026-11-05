@@ -10,6 +10,11 @@ The Creative studio agent creates designs straight into your Canva account, in a
 - **Check it works:** in Claude Code type *"Use the creative-studio agent to list my Canva brand kits."*
 - Agents never delete or change your existing designs and never share or publish anything from Canva without your approval.
 
+## Metricool: connected ✅ (YouTube + Instagram)
+- Results & ROI reads your real numbers every week. First snapshot: `brand-os/reporting/reports/2026-11-05_baseline.md`.
+- Publishing & social can see best posting times and, after your OK, schedule approved posts.
+- Test it any time: *"Use Metricool to show my YouTube subscribers and Instagram followers."*
+
 ## The tool map
 | Zone | Tools |
 |---|---|

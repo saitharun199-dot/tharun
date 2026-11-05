@@ -13,3 +13,5 @@
 2026-11-05 17:00 | publishing-social | wrote owner publishing pack for week of 9 Nov | queue/publishing-pack_2026-11-09.md | needs owner
 2026-11-05 17:06 | owner | approved all 7 drafts for week of 9 Nov | queue/approved/ | done
 2026-11-05 17:30 | publishing-social | marked published: biryani Short | queue/published/2026-11-09_content-engine_biryani-in-dubai-short.md | done
+2026-11-05 17:45 | owner | connected Metricool (YouTube + Instagram, brand 7903058) | .claude/agents/ | done
+2026-11-05 17:45 | results-roi | baseline report from Metricool | brand-os/reporting/reports/2026-11-05_baseline.md | done
