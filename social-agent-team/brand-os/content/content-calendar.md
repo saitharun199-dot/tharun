@@ -8,3 +8,4 @@
 | 2026-11-14 | 09:00 | Instagram carousel | Weekend getaways | somasila camping carousel | approved — ready to post (moved from Fri 13 Nov 18:30) | queue/approved/2026-11-13_content-engine_somasila-camping-carousel.md |
 | 2026-11-14 | 19:00 | YouTube Shorts | Trip series | burj khalifa fountain short | approved — ready to post | queue/approved/2026-11-14_content-engine_burj-khalifa-fountain-short.md |
 | 2026-11-15 | 10:00 | YouTube long video (plan) | The ride (MT-15) | next long video plan | approved — ready to post | queue/approved/2026-11-15_content-engine_next-long-video-plan.md |
+| 2026-11-17 | 19:00 | Instagram Reel + YouTube Short | Local people & stories | natural farming part 2 | draft — needs owner | queue/pending/2026-11-17_content-engine_natural-farming-part-2.md |

@@ -17,3 +17,4 @@
 2026-11-05 17:45 | results-roi | baseline report from Metricool | brand-os/reporting/reports/2026-11-05_baseline.md | done
 2026-11-05 17:50 | results-roi | top Reels confirmed: bike, natural farming, Ganesh festival → content pillars updated | brand-os/content/content-pillars.md | done
 2026-11-05 17:54 | owner | added YouTube link + new bio on Instagram | instagram profile | done
+2026-11-05 17:54 | content-engine | drafted natural farming Part 2 (Reel/Short + optional long video) | queue/pending/2026-11-17_content-engine_natural-farming-part-2.md | needs owner
