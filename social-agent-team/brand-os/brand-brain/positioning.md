@@ -14,7 +14,8 @@
 - **Best video so far:** https://youtu.be/pgYw9L3BoHY — use it as the model for hooks, length and style
 - **Signature route:** the Maharashtra ride towards Lonavala (Western Ghats)
 - **Main call to action:** "Subscribe for the rest of the series" / "Tell us where we should go next 👇"
-- **Production:** shot on DJI, original music, chapters in every description
+- **Production:** shot on DJI, original music, chapters in every description. Tharun also edits travel and cinematic videos, and cinematic style is a big strength
+- **What the audience loves most (Instagram, Sep–Nov 2026):** the bike, local people's stories (natural farming), festivals (Ganesh)
 - **Published videos to reuse for Shorts/Reels:**
   - DUBAI Day 1 & 2 — https://youtu.be/haaz0KPLg54 (biryani, Dubai Mall, Burj Khalifa fountain, desert night drive)
   - DUBAI DAY 3 — https://youtu.be/5e4pMrdCo4w (golden-hour boat ride, night out with the boys)
