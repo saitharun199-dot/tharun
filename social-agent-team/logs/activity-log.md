@@ -16,3 +16,4 @@
 2026-11-05 17:45 | owner | connected Metricool (YouTube + Instagram, brand 7903058) | .claude/agents/ | done
 2026-11-05 17:45 | results-roi | baseline report from Metricool | brand-os/reporting/reports/2026-11-05_baseline.md | done
 2026-11-05 17:50 | results-roi | top Reels confirmed: bike, natural farming, Ganesh festival → content pillars updated | brand-os/content/content-pillars.md | done
+2026-11-05 17:54 | owner | added YouTube link + new bio on Instagram | instagram profile | done
