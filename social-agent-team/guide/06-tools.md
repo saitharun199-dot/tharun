@@ -2,6 +2,14 @@
 You do **not** need any of these to start. Add them one by one as the business grows.
 *"Connecting" a tool* in Claude Code = adding an **MCP connector** (a plug that lets Claude read/post in that app). In the Claude app: Settings → Connectors. Many tools also allow simple CSV export you can drop into the folder.
 
+## Canva — connected ✅
+The Creative studio agent creates designs straight into your Canva account, in a folder called **Agent Team – Drafts**, and puts the edit link in each queue item.
+- **Using the Claude app or claude.ai/code:** already connected (Settings → Connectors → Canva).
+- **Using Claude Code on your own computer:** sign in with the same Claude account and the Canva connector comes along. If it doesn't show up, type this in Terminal once, then follow the Canva sign-in page that opens:
+  `claude mcp add --transport http canva https://mcp.canva.com/mcp`
+- **Check it works:** in Claude Code type *"Use the creative-studio agent to list my Canva brand kits."*
+- Agents never delete or change your existing designs and never share or publish anything from Canva without your approval.
+
 ## The tool map
 | Zone | Tools |
 |---|---|

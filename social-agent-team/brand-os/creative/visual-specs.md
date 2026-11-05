@@ -1,4 +1,10 @@
 # Visual specs
+## Canva
+- **Connected:** yes
+- **Brand kit ID:** `kAGTPM9D8No` — set your colours, fonts and logo in Canva → Brand → Brand Kit and agents will use them
+- **Drafts folder:** "Agent Team – Drafts"
+- **Designs agents can reuse as a style reference:** e.g. "Ride With Tharun – YouTube Thumbnail Frame" [OWNER TO CONFIRM]
+
 - **Brand colours (hex):** primary ____ secondary ____ accent ____
 - **Fonts:** heading ____ body ____
 - **Logo:** where it goes, minimum size, never stretch
