@@ -1,0 +1,1 @@
+Interview me (the owner) one question at a time to fill brand-os/brand-brain/: voice-guide.md, positioning.md, audience-personas.md and budget-and-approval.md. Ask simple questions with examples. After each answer, write it into the file. $ARGUMENTS

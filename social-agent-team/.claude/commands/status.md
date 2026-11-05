@@ -1,0 +1,1 @@
+Give me a plain-English status: is KILL_SWITCH on or off, how many items in queue/pending, queue/approved, queue/published, the last 10 lines of logs/activity-log.md, and the next 7 days of the content calendar.
