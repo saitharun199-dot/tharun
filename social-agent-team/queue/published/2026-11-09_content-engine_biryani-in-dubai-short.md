@@ -1,4 +1,7 @@
 ---
+status: published
+published_at: 2026-11-05 17:30
+live_link: https://youtube.com/shorts/Q-GxDEP6zPQ
 department: content-engine
 channel: YouTube Shorts
 scheduled_for: 2026-11-09 19:00

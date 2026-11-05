@@ -44,7 +44,7 @@ All covers and thumbnails: **Canva drafts folder → https://www.canva.com/folde
   ```
 - **Cover:** pick a frame of the first bite. (No Canva cover made yet for this one.)
 - [x] Approved by owner
-- [ ] Posted
+- [x] Posted — https://youtube.com/shorts/Q-GxDEP6zPQ (2026-11-05 17:30)
 
 ## Tue 10 Nov · 19:00 · Instagram Reel — Somasila speedboat
 - **Upload:** clip from *Weekend at Somasila* (https://youtu.be/4ApjvvqqM7g), starting at **0:38** ("Speedboat ride"). 15–25 s. Open on the boat speeding up, buddy shouting.

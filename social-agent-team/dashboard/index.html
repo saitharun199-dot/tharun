@@ -443,7 +443,7 @@ const RWT=[
  {dept:"publishing",ch:"Wed 11 Nov · YouTube community poll",text:"Dubai done ✅ Somasila done ✅ Now YOU pick the next trip! Lonavala on the MT-15 🏍️ / More Dubai 🇦🇪 / Another camping weekend ⛺ / Comment 💬",risk:"low"},
  {dept:"content",ch:"Tue 10 Nov · Instagram Reel",text:"“Inka speed ga po anna!” 😂🚤 Speedboat across the సోమశిల backwaters with the buddies, then night camping and a sunrise you have to see 🌅 Where should we go next? 👇",risk:"low"},
  {dept:"content",ch:"Mon 9 Nov · YouTube Short",text:"“Does Hyderabadi biryani taste the same in DUBAI? 😄 | Telugu Vlog #Shorts”. First bite, verdict at the end. Clip from Dubai Day 1 & 2 at 2:16.",risk:"low"}];
-RWT.forEach(i=>addItem(i,"approved"));tab="approved";document.querySelectorAll(".qtab").forEach(x=>x.setAttribute("aria-selected",x.dataset.q==="approved"));renderQ();
+RWT.forEach((i,k)=>addItem(k===RWT.length-1?{...i,text:i.text+" · LIVE: youtube.com/shorts/Q-GxDEP6zPQ"}:i,k===RWT.length-1?"published":"approved"));log("publishing","published: biryani Short · youtube.com/shorts/Q-GxDEP6zPQ");tab="approved";document.querySelectorAll(".qtab").forEach(x=>x.setAttribute("aria-selected",x.dataset.q==="approved"));renderQ();
 log("owner","connected Canva · brand kit kAGTPM9D8No");log("owner","voice guide rebuilt from 3 real YouTube descriptions");log("creative","Canva folder ‘Agent Team – Drafts’ + thumbnail template copy");log("orchestrator","planned week of 9 Nov · 7 drafts → queue/pending (strict bar)");log("publishing","publishing pack ready · drafts tidied");log("owner","approved all 7 drafts → queue/approved");
 </script>
 
