@@ -246,7 +246,7 @@ body.killed .ctls .ctl.kill{background:#3a1512;border-color:var(--loop);color:va
         <button class="qtab" role="tab" data-q="published" aria-selected="false">Published <span id="cPublished"></span></button>
       </div>
       <div class="qlist" id="qlist"></div>
-      <span class="sample">EXAMPLE ITEMS · real drafts land in queue/ in your project</span>
+      <span class="sample">RIDE WITH THARUN · week of 9–15 Nov · files in queue/pending/</span>
     </div>
     <div class="zone" id="logPanel">
       <h2>Activity log</h2>
@@ -435,9 +435,16 @@ document.addEventListener("click",e=>{const c=e.target.closest("[data-go]");if(!
 let tt;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2400)}
 
 // sample starting state (marked as examples)
-addItem(PB[2].item,"pending");addItem(PB[5].item,"pending");addItem(PB[7].item,"approved");
-addItem({dept:"publishing",ch:"LinkedIn",text:"“3 questions to ask before choosing a clinic” carousel.",risk:"low"},"published");
-log("results","weekly report written (example)");log("leads","replied to 4 DMs from FAQ (example)");log("orchestrator","scored 12 signals, kept top 5 (example)");
+const RWT=[
+ {dept:"content",ch:"Sun 15 Nov · YouTube long video plan",text:"Next long video: A) “MANCHERIAL to LONAVALA on MT-15 🏍️ Ghats, Rain & Vada Pav | Telugu Vlog” or B) “DUBAI DAY 4 | … | Telugu Vlog”. Tell us which footage you have. Thumbnail template ready in Canva → Agent Team – Drafts.",risk:"medium"},
+ {dept:"content",ch:"Sat 14 Nov · YouTube Short",text:"“Burj Khalifa light show + Dubai Fountain at night ✨ | Telugu Vlog #Shorts”. Clip from Dubai Day 1 & 2 at 5:59. దుబాయ్ nights hit different ✨",risk:"low"},
+ {dept:"content",ch:"Fri 13 Nov · Instagram carousel",text:"Calm + adventure with the buddies ⛺🌅 Jetty ➝ speedboat ➝ tents under the stars ➝ sunrise. And yes, the goat gang showed up 🐐😂 (5 frames from Somasila)",risk:"low"},
+ {dept:"content",ch:"Thu 12 Nov · Short + Reel",text:"“Golden hour on the water in DUBAI 🌅 | Telugu Vlog #Shorts”. Day 3 in Dubai was all about the views. Sunset boat ride with the skyline lighting up.",risk:"low"},
+ {dept:"publishing",ch:"Wed 11 Nov · YouTube community poll",text:"Dubai done ✅ Somasila done ✅ Now YOU pick the next trip! Lonavala on the MT-15 🏍️ / More Dubai 🇦🇪 / Another camping weekend ⛺ / Comment 💬",risk:"low"},
+ {dept:"content",ch:"Tue 10 Nov · Instagram Reel",text:"“Inka speed ga po anna!” 😂🚤 Speedboat across the సోమశిల backwaters with the buddies, then night camping and a sunrise you have to see 🌅 Where should we go next? 👇",risk:"low"},
+ {dept:"content",ch:"Mon 9 Nov · YouTube Short",text:"“Does Hyderabadi biryani taste the same in DUBAI? 😄 | Telugu Vlog #Shorts”. First bite, verdict at the end. Clip from Dubai Day 1 & 2 at 2:16.",risk:"low"}];
+RWT.forEach(i=>addItem(i,"pending"));
+log("owner","connected Canva · brand kit kAGTPM9D8No");log("owner","voice guide rebuilt from 3 real YouTube descriptions");log("creative","Canva folder ‘Agent Team – Drafts’ + thumbnail template copy");log("orchestrator","planned week of 9 Nov · 7 drafts → queue/pending (strict bar)");
 </script>
 
 </html>
