@@ -1,5 +1,5 @@
 # Audience personas — Ride With Tharun
-<!-- Starting guesses. Check YouTube Studio → Audience and correct these. [OWNER TO CONFIRM] -->
+<!-- Starting guesses. Check YouTube Studio → Audience and correct these. Likely audience: riders in Telangana and Maharashtra, MT-15 / 150–200cc owners. -->
 ## Persona 1: The weekend rider
 - 20–35, owns a bike, rides on weekends with friends
 - Wants: new routes, ride ideas, gear tips, good food stops

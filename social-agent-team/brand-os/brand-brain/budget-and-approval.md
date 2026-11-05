@@ -16,5 +16,5 @@
 Agents put every draft in `queue/pending/`. Nothing goes to `queue/approved/` until the owner says yes.
 Exception: none. (Owner can loosen this later by editing this file.)
 ## How to reach the owner
-- Channel: [OWNER TO CONFIRM — email / WhatsApp]
+- Channel: **Email** (address: [OWNER TO CONFIRM])
 - Quiet hours: [OWNER TO CONFIRM]
