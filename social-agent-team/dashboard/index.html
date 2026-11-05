@@ -254,11 +254,11 @@ body.killed .ctls .ctl.kill{background:#3a1512;border-color:var(--loop);color:va
     </div>
     <div class="zone" id="ownerPanel">
       <h2>Owner inputs</h2>
-      <div class="field"><label for="oVoice">Brand voice</label><input id="oVoice" placeholder="e.g. warm, expert, no slang"></div>
-      <div class="field"><label for="oBudget">Monthly budget cap</label><input id="oBudget" placeholder="e.g. $300 / ₹25,000"></div>
+      <div class="field"><label for="oVoice">Brand voice</label><input id="oVoice" placeholder="e.g. warm, expert, no slang" value="Friendly and fun, like a riding buddy"></div>
+      <div class="field"><label for="oBudget">Monthly budget cap</label><input id="oBudget" placeholder="e.g. $300 / ₹25,000" value="₹0, organic only"></div>
       <div class="field"><label for="oBar">Approval bar</label>
-        <select id="oBar"><option value="std">Standard: offers, ads and bad reviews need me</option><option value="strict">Strict: I approve everything</option><option value="loose">Loose: only money and crises need me</option></select></div>
-      <div class="field"><label for="oPos">Positioning</label><textarea id="oPos" placeholder="e.g. the only same-day dental clinic in Pune"></textarea></div>
+        <select id="oBar"><option value="std">Standard: offers, ads and bad reviews need me</option><option value="strict" selected>Strict: I approve everything</option><option value="loose">Loose: only money and crises need me</option></select></div>
+      <div class="field"><label for="oPos">Positioning</label><textarea id="oPos" placeholder="e.g. the only same-day dental clinic in Pune">Ride With Tharun: real, friendly motorcycle rides and road-trip tips on YouTube and Instagram</textarea></div>
       <button class="btn" id="saveOwner">Save inputs</button>
       <div class="hint">Saved in this browser only. To give them to your agents, run <code style="font-family:var(--mono);color:var(--fg)">/setup-brand</code> in Claude Code.</div>
     </div>

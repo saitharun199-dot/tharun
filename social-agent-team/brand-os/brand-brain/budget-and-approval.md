@@ -1,19 +1,20 @@
-# Budget cap & approval bar  (OWNER SETS THIS)
+# Budget cap & approval bar — Ride With Tharun  (OWNER SET)
 ## Budget
-- Monthly ad / boost cap: **₹/$ ____**
-- Max single spend without asking: **₹/$ ____**
-- Paid tools budget: **₹/$ ____**
-## Approval bar
+- Monthly ad / boost cap: **₹0 — organic only**
+- Max single spend without asking: **₹0**
+- Agents must never suggest or start paid ads or boosts.
+- Paid tools: use free tiers only unless the owner says otherwise.
+## Approval bar: STRICT
+**The owner approves everything before it goes public.**
 | Type of item | Auto-approve? |
 |---|---|
-| Routine social post from content calendar | YES |
-| Reply to 4–5 star review | YES |
-| FAQ answer in DM | YES |
-| Reply to 1–3 star review | NO — owner |
-| Any offer, discount or price | NO — owner |
-| Any ad or paid boost | NO — owner |
-| Mentions a competitor / news / politics | NO — owner |
-| New topic not in content pillars | NO — owner |
+| Any post, Short, Reel, Story or community post | NO — owner |
+| Any YouTube title, description, thumbnail | NO — owner |
+| Any reply to a comment, review or DM | NO — owner |
+| Sponsorship or collab messages | NO — owner |
+| Anything that spends money | BLOCKED (₹0 budget) |
+Agents put every draft in `queue/pending/`. Nothing goes to `queue/approved/` until the owner says yes.
+Exception: none. (Owner can loosen this later by editing this file.)
 ## How to reach the owner
-- Channel (email / WhatsApp / Slack):
-- Quiet hours (no pings):
+- Channel: [OWNER TO CONFIRM — email / WhatsApp]
+- Quiet hours: [OWNER TO CONFIRM]
