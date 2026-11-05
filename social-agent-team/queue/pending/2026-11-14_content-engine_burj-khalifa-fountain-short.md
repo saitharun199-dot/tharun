@@ -1,0 +1,19 @@
+---
+department: content-engine
+channel: YouTube Shorts
+scheduled_for: 2026-11-14 19:00
+risk: low
+needs_owner: yes   # strict approval bar
+cost: 0
+canva_link: 
+---
+**Clip from:** DUBAI Day 1 & 2 (https://youtu.be/haaz0KPLg54) — chapter 5:59 "Burj Khalifa light show & Dubai Fountain"
+**Length:** 30–45s.
+
+**Title:** Burj Khalifa light show + Dubai Fountain at night ✨ | Telugu Vlog #Shorts
+
+**Description:**
+దుబాయ్ nights hit different ✨ Burj Khalifa light show + the fountain, live!
+Full vlog 👉 @ridewiththarun1724
+
+#BurjKhalifa #DubaiFountain #Dubai #TeluguVlog #Shorts

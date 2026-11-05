@@ -2,7 +2,8 @@
 ## Canva
 - **Connected:** yes
 - **Brand kit ID:** `kAGTPM9D8No` — set your colours, fonts and logo in Canva → Brand → Brand Kit and agents will use them
-- **Drafts folder:** "Agent Team – Drafts"
+- **Drafts folder:** "Agent Team – Drafts" — https://www.canva.com/folder/FAHaEOMRhXo
+- **AI design generation:** OFF on this Canva team, so agents copy the thumbnail frame template instead
 - **Style reference:** "Ride With Tharun – YouTube Thumbnail Frame" (Canva) — use it for every YouTube thumbnail
 
 - **Brand colours (hex):** primary ____ secondary ____ accent ____

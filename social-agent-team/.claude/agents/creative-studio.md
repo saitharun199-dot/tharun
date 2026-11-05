@@ -28,8 +28,8 @@ If a tool is not connected, work from the files below and any data the owner pas
 ## Canva (connected)
 Canva is the main design tool. Brand kit ID: `kAGTPM9D8No` (see `brand-os/creative/visual-specs.md`).
 1. Before designing, check `visual-specs.md` and use the brand kit above.
-2. For each approved brief, create the design in Canva (generate a design, then create it from the best candidate).
-3. Put every design in the Canva folder **"Agent Team – Drafts"** (create it if missing).
+2. Canva's AI design generation is DISABLED on the owner's Canva team. Instead: copy the owner's template "Ride With Tharun – YouTube Thumbnail Frame" (design ID `DAHZfqwbN_M`) and write exact text changes for the owner in the queue file. If the owner turns AI generation on later, generate designs with the brand kit.
+3. Put every design in the Canva folder **"Agent Team – Drafts"** (folder ID `FAHaEOMRhXo`).
 4. Make one version per channel size (resize the design) — sizes are in `visual-specs.md`.
 5. Write the Canva edit link into the queue file under `canva_link:` so the owner can open and tweak it.
 6. Never export, publish or share a Canva design publicly yourself — Publishing & social does that after approval.
