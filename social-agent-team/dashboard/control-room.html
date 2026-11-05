@@ -1,0 +1,445 @@
+<title>Social Agent Control Room</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single dark board — four columns of zones joined by a feedback rail, control room underneath. Dark by choice to match the owner's reference. */
+:root{
+  color-scheme:dark;
+  --bg:#0d0e0e; --panel:#151717; --panel-2:#1b1e1e; --line:#2a2e2e; --line-2:#3a3f3f;
+  --fg:#ebe8e1; --muted:#8e938f; --faint:#5d625f;
+  --accent:#f4a62a; --accent-ink:#1a1204;
+  --loop:#ef5a4c; --data:#4c9fff; --ok:#46c47e; --warn:#f4a62a;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1480px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+h1{font-family:var(--display);font-stretch:112%;font-weight:900;font-size:clamp(24px,3.4vw,44px);letter-spacing:-.01em;margin:0;text-wrap:balance;line-height:1}
+h1 em{font-style:normal;color:var(--accent)}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{background:var(--panel-2);border:1px solid var(--line-2);border-radius:6px;padding:8px 12px;font-weight:600;font-size:13px}
+.btn:hover{border-color:var(--fg)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.danger{border-color:var(--loop);color:var(--loop)}
+.btn:focus-visible,.card:focus-visible,.zone:focus-visible,.int:focus-visible,.ctl:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.status-pill{font-family:var(--mono);font-size:12px;padding:6px 10px;border-radius:99px;border:1px solid var(--line-2);display:inline-flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+body.killed .dot{background:var(--loop)}
+
+/* board */
+.board{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,1.6fr) minmax(0,1fr);gap:14px;
+  border:1px solid var(--line);border-radius:10px;padding:14px;position:relative;background:var(--bg)}
+.col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.zone{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.zone h2{margin:0;font-family:var(--display);font-stretch:108%;font-weight:800;font-size:15px;letter-spacing:.02em;text-transform:uppercase;display:flex;gap:8px;align-items:baseline}
+.zone h2 .n{font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:400}
+.zone .sub{color:var(--muted);font-size:12px;margin-top:-6px}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:8px}
+.chip{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:10.5px;color:var(--muted);line-height:1.15}
+.ico{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:12px;color:#fff;background:var(--c,#444)}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--loop);border:1px solid var(--loop);border-radius:4px;padding:2px 6px;width:max-content}
+.owner .ctl{background:var(--panel-2);border:1px dashed var(--line-2);border-radius:6px;padding:8px;text-align:left;display:flex;flex-direction:column;gap:2px}
+.owner .ctl b{font-size:12px}
+.owner .ctl span{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.step{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:2px;transition:border-color .2s,background .2s}
+.step b{font-size:12.5px}
+.step i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--faint)}
+.step.live{border-color:var(--accent);background:#2a2010}
+.note{font-size:12px;color:var(--muted)}
+.kl-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.kf{font-family:var(--mono);font-size:11.5px;padding:6px 8px;border-radius:5px;background:var(--panel-2);border:1px solid var(--line);text-align:left;display:flex;flex-direction:column;gap:1px;min-width:0}
+.kf b{font-weight:500;color:var(--fg);display:flex;gap:6px;align-items:center}
+.kf b::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--k)}
+.kf span{color:var(--faint);font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.ctls .ctl{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:8px 2px;font-size:10.5px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.ctls .ctl svg{width:18px;height:18px;stroke:var(--fg);fill:none;stroke-width:1.6}
+.ctls .ctl.kill svg{stroke:var(--loop)}
+body.killed .ctls .ctl.kill{background:#3a1512;border-color:var(--loop);color:var(--fg)}
+
+.depts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:10px;text-align:left;display:flex;flex-direction:column;gap:8px;transition:border-color .25s,box-shadow .25s;min-width:0}
+.card:hover{border-color:var(--line-2)}
+.card h3{margin:0;font-family:var(--display);font-stretch:105%;font-weight:800;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;display:flex;gap:6px;align-items:baseline}
+.card h3 .n{font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:400}
+.card .chips{grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:6px}
+.card .ico{width:28px;height:28px;font-size:10.5px;border-radius:7px}
+.card.busy{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 22px -6px var(--accent)}
+.card .state{font-family:var(--mono);font-size:10px;color:var(--faint)}
+.card.busy .state{color:var(--accent)}
+
+.ints{display:flex;flex-direction:column;gap:6px}
+.int{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:7px 9px;text-align:left;font-size:12px;font-weight:600}
+.int:hover{border-color:var(--accent)}
+.int .who{display:flex;gap:3px;flex-shrink:0}
+.int .who i{width:16px;height:16px;border-radius:4px;background:var(--c);display:block}
+.int .owner-flag{font-family:var(--mono);font-size:9.5px;color:var(--loop)}
+
+.legend{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted);border-top:1px dashed var(--line-2);padding-top:12px;grid-column:1/-1}
+.legend .l{display:flex;align-items:center;gap:8px}
+.legend .l i{width:26px;height:0;border-top:2px solid var(--c)}
+.legend .l i.d{border-top-style:dashed}
+.rail{color:var(--loop);letter-spacing:.12em}
+
+/* control room */
+.room{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:14px}
+.room .zone{min-height:320px}
+.qtabs{display:flex;gap:6px;flex-wrap:wrap}
+.qtab{background:none;border:1px solid var(--line-2);border-radius:99px;padding:4px 10px;font-size:12px;color:var(--muted)}
+.qtab[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.qlist{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto}
+.qi{border:1px solid var(--line);border-left:3px solid var(--sev);border-radius:6px;padding:9px 10px;background:var(--panel-2);display:flex;flex-direction:column;gap:6px}
+.qi .meta{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.qi .meta b{color:var(--fg);font-weight:500}
+.qi p{margin:0;font-size:13px}
+.qi .acts{display:flex;gap:6px}
+.qi .acts .btn{padding:5px 10px;font-size:12px}
+.empty{color:var(--faint);font-size:13px;padding:18px 4px}
+.log{font-family:var(--mono);font-size:11.5px;display:flex;flex-direction:column;gap:4px;max-height:420px;overflow:auto;color:var(--muted)}
+.log div{border-bottom:1px solid var(--line);padding-bottom:4px;overflow-wrap:anywhere}
+.log b{color:var(--accent);font-weight:500}
+.log .bad b{color:var(--loop)}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12px;font-weight:600}
+.field input,.field textarea,.field select{background:var(--panel-2);border:1px solid var(--line-2);color:var(--fg);border-radius:6px;padding:7px 8px;font:inherit;font-size:13px;width:100%}
+.field textarea{min-height:56px;resize:vertical}
+.hint{font-size:11.5px;color:var(--faint)}
+.sample{font-family:var(--mono);font-size:10px;color:var(--warn);border:1px solid var(--warn);border-radius:4px;padding:1px 5px;width:max-content}
+
+/* drawer */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--panel);border-left:1px solid var(--line-2);z-index:20;
+  transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;
+  padding:calc(18px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) 18px;gap:12px;overflow:auto}
+.drawer.open{transform:none}
+.drawer h2{font-family:var(--display);font-stretch:110%;font-weight:900;font-size:22px;margin:0;text-wrap:balance}
+.drawer h4{margin:6px 0 0;font-size:11px;font-family:var(--mono);color:var(--faint);text-transform:uppercase;letter-spacing:.08em;font-weight:500}
+.drawer ol,.drawer ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
+.drawer code,.cmd{font-family:var(--mono);font-size:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.cmdrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.cmd{padding:6px 8px;overflow-wrap:anywhere;flex:1;min-width:0;user-select:all}
+.scrim{position:fixed;inset:0;background:#000a;z-index:15;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.open{opacity:1;pointer-events:auto}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(120px);background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:6px;font-weight:600;font-size:13px;z-index:30;transition:transform .25s;max-width:calc(100% - 32px)}
+.toast.show{transform:translateX(-50%)}
+
+@media (max-width:1200px){.board{grid-template-columns:1fr 1fr}.room{grid-template-columns:1fr 1fr}.room .zone:first-child{grid-column:1/-1}}
+@media (max-width:720px){.board{grid-template-columns:1fr;padding:10px}.room{grid-template-columns:1fr}.depts{grid-template-columns:1fr}.ctls{grid-template-columns:repeat(3,1fr)}.steps{grid-template-columns:repeat(2,1fr)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>AI NATIVE <em>SOCIAL MEDIA AGENT</em> TEAM</h1>
+    <div class="top-actions">
+      <span class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">Running</span></span>
+      <button class="btn primary" id="weeklyBtn">Run weekly loop</button>
+      <button class="btn danger" id="killBtn">Kill switch</button>
+    </div>
+  </header>
+
+  <section class="board" aria-label="System map">
+    <!-- column 1 -->
+    <div class="col">
+      <div class="zone" tabindex="0" data-zone="signals">
+        <h2><span class="n">01</span>Signals</h2>
+        <div class="sub">where every market and brand signal comes from</div>
+        <div class="chips" id="sigChips"></div>
+      </div>
+      <div class="zone" tabindex="0" data-zone="sor">
+        <h2><span class="n">02</span>System of record</h2>
+        <div class="sub">the customer spine, one unified profile</div>
+        <div class="chips" id="sorChips"></div>
+      </div>
+      <div class="zone owner">
+        <h2>Owner input</h2>
+        <div class="sub">what the one human sets</div>
+        <span class="tag">HUMAN-LED · NOT COUNTED</span>
+        <div class="owner-grid" id="ownerTiles"></div>
+      </div>
+      <div class="zone" tabindex="0" data-zone="brain">
+        <h2><span class="n">03</span>The brain</h2>
+        <div class="sub">the labour</div>
+        <div class="chips" id="brainChips"></div>
+        <div class="note">Claude reasons and writes, the agent runner handles multi-step work, the memory store remembers every topic and customer.</div>
+      </div>
+    </div>
+
+    <!-- column 2 -->
+    <div class="col">
+      <div class="zone" tabindex="0" data-zone="orch">
+        <h2><span class="n">03</span>Orchestrator</h2>
+        <div class="sub">every event enters here first, nothing publishes on its own</div>
+        <div class="steps" id="steps"></div>
+        <div class="note">Routine content ships end to end. Only budget changes and edge cases reach the owner.</div>
+      </div>
+      <div class="zone">
+        <h2><span class="n">04</span>Knowledge layer + access</h2>
+        <div class="sub">the brand brain, one shared workspace · Brand OS file system</div>
+        <div class="kl-grid" id="klGrid"></div>
+        <div class="ctls">
+          <button class="ctl" data-go="owner"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Owner dashboard</button>
+          <button class="ctl" data-go="queue"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Approval queue</button>
+          <button class="ctl" data-go="log"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg>Activity log</button>
+          <button class="ctl" data-go="perm"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>Permissions</button>
+          <button class="ctl" data-go="alerts"><svg viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0112 0v6l2 2H4zM10 21h4"/></svg>Alerts</button>
+          <button class="ctl kill" data-go="kill"><svg viewBox="0 0 24 24"><path d="M12 3v9M6.3 6.3a8 8 0 1011.4 0"/></svg>Kill switch</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- column 3 -->
+    <div class="col">
+      <div class="zone">
+        <h2><span class="n">05</span>Departments</h2>
+        <div class="sub">eight departments an owner recognizes · the orchestrator hands each one its work</div>
+        <div class="depts" id="depts"></div>
+      </div>
+    </div>
+
+    <!-- column 4 -->
+    <div class="col">
+      <div class="zone" tabindex="0" data-zone="engage">
+        <h2><span class="n">06</span>Engage</h2>
+        <div class="sub">approved content goes back out from one brain</div>
+        <div class="chips" id="engChips"></div>
+        <div class="note" id="engNote">Audience: followers, customers, reviewers</div>
+      </div>
+      <div class="zone">
+        <h2>What interrupts the loop</h2>
+        <div class="sub">things that used to need a marketer at a desk · tap one to run its playbook</div>
+        <div class="ints" id="ints"></div>
+      </div>
+      <div class="zone" tabindex="0" data-zone="data">
+        <h2><span class="n">07</span>Data &amp; observability</h2>
+        <div class="sub">the numbers behind every card</div>
+        <div class="chips" id="dataChips"></div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="rail">← RESULTS FEED SIGNALS AGAIN</span>
+      <span class="l"><i style="--c:var(--fg)"></i>Buyer journey</span>
+      <span class="l"><i style="--c:var(--loop)"></i>Feedback loop</span>
+      <span class="l"><i class="d" style="--c:var(--line-2)"></i>Human control</span>
+      <span class="l"><i class="d" style="--c:var(--data)"></i>Background data</span>
+    </div>
+  </section>
+
+  <section class="room" aria-label="Control room">
+    <div class="zone" id="queuePanel">
+      <h2>Approval queue</h2>
+      <div class="qtabs" role="tablist">
+        <button class="qtab" role="tab" data-q="pending" aria-selected="true">Needs you <span id="cPending"></span></button>
+        <button class="qtab" role="tab" data-q="approved" aria-selected="false">Approved <span id="cApproved"></span></button>
+        <button class="qtab" role="tab" data-q="published" aria-selected="false">Published <span id="cPublished"></span></button>
+      </div>
+      <div class="qlist" id="qlist"></div>
+      <span class="sample">RIDE WITH THARUN · week of 9–15 Nov · files in queue/pending/</span>
+    </div>
+    <div class="zone" id="logPanel">
+      <h2>Activity log</h2>
+      <div class="log" id="log"></div>
+    </div>
+    <div class="zone" id="ownerPanel">
+      <h2>Owner inputs</h2>
+      <div class="field"><label for="oVoice">Brand voice</label><input id="oVoice" placeholder="e.g. warm, expert, no slang" value="Friendly and fun, like a riding buddy"></div>
+      <div class="field"><label for="oBudget">Monthly budget cap</label><input id="oBudget" placeholder="e.g. $300 / ₹25,000" value="₹0, organic only"></div>
+      <div class="field"><label for="oBar">Approval bar</label>
+        <select id="oBar"><option value="std">Standard: offers, ads and bad reviews need me</option><option value="strict" selected>Strict: I approve everything</option><option value="loose">Loose: only money and crises need me</option></select></div>
+      <div class="field"><label for="oPos">Positioning</label><textarea id="oPos" placeholder="e.g. the only same-day dental clinic in Pune">Ride With Tharun: real, friendly motorcycle rides and road-trip tips on YouTube and Instagram</textarea></div>
+      <button class="btn" id="saveOwner">Save inputs</button>
+      <div class="hint">Saved in this browser only. To give them to your agents, run <code style="font-family:var(--mono);color:var(--fg)">/setup-brand</code> in Claude Code.</div>
+    </div>
+  </section>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"><div id="drawerBody"></div><button class="btn" id="closeDrawer">Close</button></aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const C={g:"#4285f4",o:"#f39c12",r:"#e8553e",b:"#3b7ddd",p:"#8e5bd6",gr:"#2fa36b",k:"#2b2f2f",pk:"#d94e8f",t:"#1aa6a6",y:"#c9a227"};
+const T=(n,l,c)=>({n,l,c});
+const SIG=[T("GSC","Search queries",C.g),T("GA4","Sessions",C.o),T("SR","Rankings",C.r),T("GBP","Reviews",C.b),T("FB","FB & IG insights",C.b),T("in","LinkedIn analytics",C.b),T("YT","YouTube analytics",C.r),T("WM","Web mentions",C.gr)];
+const SOR=[T("CRM","CRM",C.r),T("CC","Content calendar",C.p),T("DR","Brand asset drive",C.y),T("WK","Brand wiki",C.k),T("CDP","Customer data",C.gr),T("US","Unified store",C.gr),T("PC","Publish calendar",C.t)];
+const BRAIN=[T("Cl","Claude reasoning",C.o),T("AR","Agent runner",C.k),T("ME","Memory store",C.b),T("IMG","Visuals",C.k),T("VO","Voice-over",C.k),T("TR","Transcribe",C.k)];
+const ENG=[T("SC","Scheduler",C.y),T("WP","Website posts",C.b),T("GBP","GBP posts",C.b),T("CH","Chat replies",C.k)];
+const DATA=[T("ETL","Data sync",C.p),T("TF","Transform",C.k),T("BQ","Warehouse",C.b),T("BI","Reports",C.b),T("HO","Hosting",C.k),T("ER","Error watch",C.p),T("FL","Flags",C.k)];
+const STEPS=[["Collects","every signal"],["Scores","what matters now"],["Briefs","the right department"],["Drafts","in your voice"],["Schedules","every channel"],["Approves","or calls the owner"]];
+const KL=[["/brand-brain","4 files · voice-guide.md",C.o],["/signals-seo","4 files · keyword-map.md",C.b],["/content","4 files · content-calendar.md",C.r],["/creative","3 files · visual-specs.md",C.p],["/social","3 files · channel-playbooks.md",C.pk],["/reputation","3 files · gbp-response.md",C.gr],["/conversation","3 files · faq-library.md",C.y],["/reporting","3 files · kpi-model.md",C.t]];
+const DEPTS=[
+ {id:"market",n:"02",name:"Market radar",c:C.r,tools:[T("SR","Rivals",C.r),T("MN","Mentions",C.gr),T("AU","Audience",C.k),T("TI","Traffic intel",C.o),T("AL","Alerts",C.b)],
+  job:"Watches competitors, trends and brand mentions so you hear about a rival's promo before your customers do.",files:["signals-seo/competitor-watchlist.md","signals-seo/demand-signals-log.md"],
+  rules:["Checks every competitor on the watchlist each week","Logs anything new with a score from 1 to 10","Never names a competitor in public without your approval"]},
+ {id:"search",n:"01",name:"Search visibility",c:C.g,tools:[T("GSC","GSC queries",C.g),T("SR","Rank tracks",C.r),T("GA4","Sessions",C.o),T("BL","Backlinks",C.b),T("CR","Site crawl",C.gr)],
+  job:"Keeps you findable on Google: rankings, keywords and your Google Business Profile.",files:["signals-seo/keyword-map.md","signals-seo/local-seo-checklist.md"],
+  rules:["Lists the 10 keywords that moved most each week","Drafts 1–2 Google Business Profile posts weekly","Suggests 3 new keyword opportunities"]},
+ {id:"content",n:"03",name:"Content engine",c:C.o,tools:[T("Cl","Drafts",C.o),T("SB","SEO briefs",C.r),T("RS","Research",C.gr),T("GR","Grammar",C.gr),T("CC","Calendar",C.p)],
+  job:"Writes blogs, captions and newsletters in your voice, mapped to your content pillars.",files:["brand-brain/voice-guide.md","content/content-pillars.md","content/content-calendar.md"],
+  rules:["Reads the voice guide before every draft","Every piece maps to one content pillar","Refills the calendar when it drops below 5 posts a week"]},
+ {id:"creative",n:"04",name:"Creative studio",c:C.p,tools:[T("CV","Canva ✓ connected",C.t),T("IMG","Images",C.k),T("VID","Video",C.b),T("LY","Layouts",C.pk),T("VO","Voice-over",C.k)],
+  job:"Turns each post into visuals: image prompts, carousels, short video scripts and ad creative. Canva is connected: designs are created in your Canva folder “Agent Team – Drafts” using brand kit kAGTPM9D8No, and the edit link is added to each queue item.",files:["creative/visual-specs.md","creative/ad-creative-brief.md","creative/video-script-template.md"],
+  rules:["Follows your colours, fonts and logo rules","Produces the right size for every channel","Never uses real faces or other brands' logos"]},
+ {id:"reviews",n:"06",name:"Reviews & reputation",c:C.gr,tools:[T("GBP","Reviews",C.b),T("PD","Review inbox",C.k),T("RQ","Review asks",C.p),T("Cl","Reply drafts",C.o),T("MN","Mentions",C.gr)],
+  job:"Replies to every review in your voice and watches for anything that could turn into a crisis.",files:["reputation/gbp-response.md","reputation/review-response-library.md","reputation/crisis-protocol.md"],
+  rules:["4–5 star replies go out within 24 hours","1–3 star replies always wait for you","Starts the crisis protocol after 3 bad mentions in 48h"]},
+ {id:"publishing",n:"05",name:"Publishing & social",c:C.pk,tools:[T("SC","Scheduler",C.y),T("WP","Website",C.b),T("GBP","GBP posts",C.b),T("FB","Facebook",C.b),T("IG","Instagram",C.pk),T("in","LinkedIn",C.b),T("TT","TikTok",C.k)],
+  job:"Schedules and posts approved content to every channel at the best times.",files:["social/channel-playbooks.md","social/post-templates.md","social/hashtag-and-timing.md"],
+  rules:["Only posts items in queue/approved","Adapts each post to the channel's rules","Moves posts to queue/published with the live link"]},
+ {id:"leads",n:"07",name:"Leads & conversations",c:C.y,tools:[T("DM","DMs",C.b),T("CRM","CRM",C.r),T("SMS","SMS",C.r),T("BK","Bookings",C.b),T("IN","Inbox",C.p)],
+  job:"Answers DMs and enquiries day and night, scores each lead and books calls.",files:["conversation/faq-library.md","conversation/dm-reply-scripts.md","conversation/lead-qualification.md"],
+  rules:["Answers only from your FAQ library","Scores every lead Hot, Warm or Cold","Hot leads get a booking link and you get a ping"]},
+ {id:"results",n:"08",name:"Results & ROI",c:C.t,tools:[T("BI","Reports",C.b),T("BQ","Warehouse",C.b),T("MB","Analytics",C.b),T("MW","Margin watch",C.k)],
+  job:"Writes the weekly report: what went out, what it earned, and three lessons for next week.",files:["reporting/kpi-model.md","reporting/weekly-report-template.md","reporting/roi-attribution.md"],
+  rules:["Fills the weekly report every Monday","Shows leads, sales, spend and cost per lead","Writes 3 new signals for next week"]},
+];
+const D=Object.fromEntries(DEPTS.map(d=>[d.id,d]));
+const PB=[
+ {id:"search-demand-spikes",name:"Search demand spikes",who:["search","content"],owner:false,trigger:"A keyword's searches jump 50%+ week over week.",
+  steps:["Search visibility confirms the spike and logs it","Orchestrator scores it; 7 or higher continues","Content engine drafts a quick post, a GBP post and a blog brief","Add the keyword to the keyword map if no page ranks","Paid boost ideas go to you"],
+  item:{dept:"content",ch:"Instagram",text:"“Searching for same-day appointments? Here's how ours work…” — quick post riding this week's search spike.",risk:"low"}},
+ {id:"competitor-drops-a-promo",name:"Competitor drops a promo",who:["market","content","creative"],owner:true,trigger:"A watched competitor launches a discount or campaign.",
+  steps:["Market radar records the offer, channel and dates","Orchestrator decides: ignore, counter with value, or counter with an offer","Any discount goes to you, never automatic","Default: a value post on our strengths, no competitor named","Creative studio makes one visual"],
+  item:{dept:"content",ch:"Facebook",text:"Value post: “Why our customers stay: 3 things you get with us that a discount can't buy.” Counter-offer option attached for you to decide.",risk:"high"}},
+ {id:"one-star-review-lands",name:"One-star review lands",who:["reviews"],owner:true,trigger:"A 1–3 star review appears.",
+  steps:["Tag the issue: service, price, wait, product, unclear, fake","Draft a calm reply: thank, own it, move it offline","Save to pending, never auto-publish","Ping you in one sentence","3+ bad reviews in 48h starts the crisis protocol"],
+  item:{dept:"reviews",ch:"Google review",text:"“Hi Priya, I'm sorry the wait was longer than promised. That's not our standard. Please message me directly so I can put this right.”",risk:"high"}},
+ {id:"content-calendar-looks-thin",name:"Content calendar looks thin",who:["content","creative","publishing"],owner:false,trigger:"Fewer than 5 posts scheduled in the next 7 days.",
+  steps:["List the empty days","Pull ideas from signals, FAQs, 5-star reviews and best past posts","Draft one post per empty day across pillars","Add image prompts and posting times","Routine posts go straight to approved"],
+  item:{dept:"content",ch:"Instagram · 4 posts",text:"Four drafts to fill Tue–Fri: 1 tip carousel, 1 review spotlight, 1 behind-the-scenes reel, 1 FAQ post.",risk:"low"}},
+ {id:"a-post-goes-viral",name:"A post goes viral",who:["publishing","leads","content"],owner:false,trigger:"A post hits 3× normal engagement in 24 hours.",
+  steps:["Publishing flags the post and numbers","Leads watches comments and DMs closely","Content drafts 2 follow-ups within 48h","Pin a comment with the next step","Boost ideas go to you with a cost"],
+  item:{dept:"content",ch:"Instagram",text:"Follow-up #1 to the viral reel: “You asked, we answered — part 2.”",risk:"low"}},
+ {id:"ranking-drops-a-page",name:"Ranking drops a page",who:["search","content"],owner:false,trigger:"A tracked page falls 10+ positions.",
+  steps:["Check the page is live and error-free","Compare with the top 3 results","Draft an update: fresh dates, missing questions, FAQs","Code fixes go to you or your web person","Re-check in 14 days"],
+  item:{dept:"search",ch:"Website",text:"Refresh for “/services/teeth-whitening”: add 4 FAQs, update prices section [OWNER TO CONFIRM], new intro.",risk:"medium"}},
+ {id:"ad-creative-fatigues",name:"Ad creative fatigues",who:["creative","results"],owner:true,trigger:"Click rate falls 30% from its best week.",
+  steps:["Results confirms the drop","Creative makes 3 new variations: new hook, new image, same offer","Budget is never changed","Ads always go to you","Keep the winner after 7 days"],
+  item:{dept:"creative",ch:"Meta ad",text:"3 new variations for the “Free consultation” ad: A) question hook, B) before/after, C) customer quote.",risk:"high"}},
+ {id:"dm-or-lead-at-11pm",name:"DM or lead at 11pm",who:["leads"],owner:false,trigger:"A message arrives outside business hours.",
+  steps:["Reply within 5 minutes with the out-of-hours script","Answer only from the FAQ","Score the lead","Hot lead: booking link plus a morning flag for you","Never promise prices or dates not in the FAQ"],
+  item:{dept:"leads",ch:"Instagram DM",text:"🔥 Hot lead: Arjun asked about availability Saturday. Booking link sent at 23:04. Flagged for your morning.",risk:"low"}},
+];
+const ZONES={
+ signals:{t:"Signals",p:"Where news comes from: Google searches, website visits, rankings, reviews, social insights and mentions. Each department reads the signals for its area and logs anything new in signals-seo/demand-signals-log.md.",tools:SIG},
+ sor:{t:"System of record",p:"One place for facts: customers, the content calendar, brand assets and the brand wiki. Agents look things up here instead of guessing.",tools:SOR},
+ brain:{t:"The brain",p:"Claude reasons and writes. Claude Code runs the agents (each agent is a file in .claude/agents). The memory store is the Brand OS folder; you can add a database later.",tools:BRAIN},
+ orch:{t:"Orchestrator",p:"The team lead (.claude/agents/orchestrator.md). Every event goes through six steps: collect, score, brief, draft, schedule, approve. Priority = impact × urgency ÷ effort. It escalates to you only for budget, complaints, positioning, or disagreements.",tools:[]},
+ engage:{t:"Engage",p:"Approved content goes out through one scheduler, your website, Google Business Profile and chat. Only items in queue/approved are ever published.",tools:ENG},
+ data:{t:"Data & observability",p:"The numbers behind every card: data sync, warehouse and reports. Results & ROI reads these each week, and results feed new signals.",tools:DATA},
+};
+
+const $=s=>document.querySelector(s);
+const chip=t=>`<div class="chip"><span class="ico" style="--c:${t.c}">${t.n}</span>${t.l}</div>`;
+const fill=(id,arr)=>{$(id).innerHTML=arr.map(chip).join("")};
+fill("#sigChips",SIG);fill("#sorChips",SOR);fill("#brainChips",BRAIN);fill("#engChips",ENG);fill("#dataChips",DATA);
+$("#steps").innerHTML=STEPS.map((s,i)=>`<div class="step" data-i="${i}"><b>${s[0]}</b><i>${s[1]}</i></div>`).join("");
+$("#klGrid").innerHTML=KL.map(k=>`<button class="kf" style="--k:${k[2]}" data-kl="${k[0]}"><b>${k[0]}</b><span>${k[1]}</span></button>`).join("");
+$("#depts").innerHTML=DEPTS.map(d=>`<button class="card" data-d="${d.id}"><h3><span class="n">${d.n}</span>${d.name}</h3><div class="chips">${d.tools.map(chip).join("")}</div><span class="state" id="st-${d.id}">idle</span></button>`).join("");
+$("#ints").innerHTML=PB.map(p=>`<button class="int" data-p="${p.id}"><span>${p.name}${p.owner?' <span class="owner-flag">· needs you</span>':''}</span><span class="who">${p.who.map(w=>`<i style="--c:${D[w].c}" title="${D[w].name}"></i>`).join("")}</span></button>`).join("");
+
+// owner tiles + inputs
+const OWN=[["oVoice","Brand voice"],["oBudget","Budget cap"],["oBar","Approval bar"],["oPos","Positioning"]];
+function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+function renderOwner(){const o=store("owner")||{};OWN.forEach(([id])=>{if(o[id]!==undefined)$("#"+id).value=o[id]});
+  $("#ownerTiles").innerHTML=OWN.map(([id,l])=>{const el=$("#"+id);const v=el.tagName==="SELECT"?el.options[el.selectedIndex].text.split(":")[0]:(el.value||"not set");return `<button class="ctl" data-go="owner"><b>${l}</b><span>${v}</span></button>`}).join("")}
+renderOwner();
+$("#saveOwner").onclick=()=>{const o={};OWN.forEach(([id])=>o[id]=$("#"+id).value);store("owner",o);renderOwner();log("owner","updated owner inputs");toast("Owner inputs saved")};
+
+// queue
+let Q={pending:[],approved:[],published:[]},tab="pending",uid=0;
+const SEV={low:"var(--ok)",medium:"var(--warn)",high:"var(--loop)"};
+function addItem(it,where){Q[where].unshift({...it,id:++uid,at:stamp()});renderQ()}
+function renderQ(){["pending","approved","published"].forEach(k=>$("#c"+k[0].toUpperCase()+k.slice(1)).textContent=Q[k].length);
+  const L=Q[tab];$("#qlist").innerHTML=L.length?L.map(i=>`<div class="qi" style="--sev:${SEV[i.risk]}"><div class="meta"><b>${D[i.dept].name}</b><span>${i.ch}</span><span>risk: ${i.risk}</span><span>${i.at}</span></div><p>${i.text}</p>${tab==="pending"?`<div class="acts"><button class="btn primary" data-a="ok" data-id="${i.id}">Approve</button><button class="btn" data-a="no" data-id="${i.id}">Reject</button></div>`:tab==="approved"?`<div class="acts"><button class="btn" data-a="pub" data-id="${i.id}">Mark published</button></div>`:""}</div>`).join(""):`<div class="empty">${tab==="pending"?"Nothing needs you right now. Routine work is shipping on its own.":"Nothing here yet."}</div>`;
+  $("#engNote").textContent=`Audience: followers, customers, reviewers · ${Q.approved.length} ready to go out · ${Q.published.length} published`}
+document.querySelectorAll(".qtab").forEach(b=>b.onclick=()=>{tab=b.dataset.q;document.querySelectorAll(".qtab").forEach(x=>x.setAttribute("aria-selected",x===b));renderQ()});
+$("#qlist").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;const id=+b.dataset.id,from=tab,i=Q[from].findIndex(x=>x.id===id),it=Q[from].splice(i,1)[0];
+  if(b.dataset.a==="ok"){Q.approved.unshift(it);log("owner",`approved: ${it.ch}`);toast("Approved — moved to the publish queue")}
+  else if(b.dataset.a==="no"){log("owner",`rejected: ${it.ch}`,true);toast("Rejected")}
+  else{Q.published.unshift(it);log("publishing",`published: ${it.ch}`);toast("Published")}
+  renderQ()};
+
+// log
+function stamp(){const d=new Date();return d.toTimeString().slice(0,5)}
+function log(agent,msg,bad){const div=document.createElement("div");if(bad)div.className="bad";div.innerHTML=`${stamp()} | <b>${agent}</b> | ${msg}`;$("#log").prepend(div)}
+
+// kill switch
+let killed=false;
+function setKill(v){killed=v;document.body.classList.toggle("killed",v);$("#statusText").textContent=v?"Kill switch ON — all agents stopped":"Running";$("#killBtn").textContent=v?"Turn agents back on":"Kill switch";log("owner",`kill switch ${v?"ON":"OFF"}`,v);toast(v?"All agents stopped":"Agents running again")}
+$("#killBtn").onclick=()=>setKill(!killed);
+
+// simulation
+const wait=ms=>new Promise(r=>setTimeout(r,matchMedia("(prefers-reduced-motion: reduce)").matches?0:ms));
+let busy=false;
+async function runPlaybook(p){
+  if(killed){toast("Kill switch is ON. Nothing ran.");log("orchestrator",`blocked: ${p.name} (kill switch)`,true);return}
+  if(busy)return;busy=true;closeDrawer();
+  log("signal",`event: ${p.name}`);
+  const st=[...document.querySelectorAll(".step")];
+  for(let i=0;i<st.length;i++){st.forEach(s=>s.classList.remove("live"));st[i].classList.add("live");
+    if(i===3)p.who.forEach(w=>{document.querySelector(`[data-d="${w}"]`).classList.add("busy");$("#st-"+w).textContent="working: "+p.name.toLowerCase()});
+    log("orchestrator",STEPS[i][0].toLowerCase()+(i===2?` → ${p.who.map(w=>D[w].name).join(", ")}`:""));await wait(450)}
+  st.forEach(s=>s.classList.remove("live"));
+  p.who.forEach(w=>{document.querySelector(`[data-d="${w}"]`).classList.remove("busy");$("#st-"+w).textContent="idle"});
+  const bar=$("#oBar").value,needs=p.owner||bar==="strict"||(p.item.risk==="medium"&&bar!=="loose");
+  addItem(p.item,needs?"pending":"approved");
+  log(p.who[0],needs?`draft → queue/pending (needs you)`:`draft → queue/approved (routine)`,needs);
+  toast(needs?"A draft is waiting for your approval":"Routine draft approved and queued");
+  busy=false}
+async function weekly(){
+  if(killed){toast("Kill switch is ON. Nothing ran.");return}
+  if(busy)return;log("orchestrator","weekly loop started");
+  for(const d of DEPTS){const el=document.querySelector(`[data-d="${d.id}"]`);el.classList.add("busy");$("#st-"+d.id).textContent="working";log(d.id,d.rules[0].toLowerCase());await wait(300);el.classList.remove("busy");$("#st-"+d.id).textContent="done this week"}
+  await runPlaybook(PB[3]);log("results","weekly report written → reporting/reports/");log("results","3 new signals added for next week")}
+$("#weeklyBtn").onclick=weekly;
+
+// drawer
+const dr=$("#drawer"),scrim=$("#scrim");
+function openDrawer(html){$("#drawerBody").innerHTML=html;dr.classList.add("open");scrim.classList.add("open");dr.setAttribute("aria-hidden","false");$("#closeDrawer").focus()}
+function closeDrawer(){dr.classList.remove("open");scrim.classList.remove("open");dr.setAttribute("aria-hidden","true")}
+$("#closeDrawer").onclick=closeDrawer;scrim.onclick=closeDrawer;document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer()});
+const cmdRow=c=>`<div class="cmdrow"><span class="cmd">${c}</span><button class="btn" data-copy="${c.replace(/"/g,"&quot;")}">Copy</button></div>`;
+document.addEventListener("click",e=>{const b=e.target.closest("[data-copy]");if(!b)return;const t=b.dataset.copy;
+  navigator.clipboard?.writeText(t).then(()=>toast("Copied. Paste it into Claude Code."),()=>{const s=b.previousElementSibling;const r=document.createRange();r.selectNodeContents(s);getSelection().removeAllRanges();getSelection().addRange(r);toast("Selected. Press Ctrl+C / ⌘C to copy.")})});
+
+document.getElementById("depts").onclick=e=>{const c=e.target.closest("[data-d]");if(!c)return;const d=D[c.dataset.d];
+  openDrawer(`<h2>${d.name}</h2><p>${d.job}</p><h4>How it works</h4><ul>${d.rules.map(r=>`<li>${r}</li>`).join("")}</ul><h4>Brand OS files it reads</h4><ul>${d.files.map(f=>`<li><code>brand-os/${f}</code></li>`).join("")}</ul><h4>Tools (when connected)</h4><div class="chips">${d.tools.map(chip).join("")}</div><h4>Ask it directly in Claude Code</h4>${cmdRow(`Use the ${c.dataset.d==="search"?"search-visibility":c.dataset.d==="market"?"market-radar":c.dataset.d==="content"?"content-engine":c.dataset.d==="creative"?"creative-studio":c.dataset.d==="publishing"?"publishing-social":c.dataset.d==="reviews"?"reviews-reputation":c.dataset.d==="leads"?"leads-conversations":"results-roi"} agent to do this week's work`)}`)};
+$("#ints").onclick=e=>{const b=e.target.closest("[data-p]");if(!b)return;const p=PB.find(x=>x.id===b.dataset.p);
+  openDrawer(`<h2>${p.name}</h2><p><b>Trigger:</b> ${p.trigger}</p><h4>Departments</h4><p>${p.who.map(w=>D[w].name).join(" · ")}</p><h4>Steps</h4><ol>${p.steps.map(s=>`<li>${s}</li>`).join("")}</ol><h4>Needs you?</h4><p>${p.owner?"Yes — this always waits in your approval queue.":"Only if it involves money or risk. Routine drafts go straight out."}</p><button class="btn primary" id="runPb">Simulate this playbook</button><h4>Run it for real in Claude Code</h4>${cmdRow(`/playbook ${p.name.toLowerCase()}: <describe what happened>`)}<p class="hint">File: <code>playbooks/${p.id}.md</code></p>`);
+  $("#runPb").onclick=()=>runPlaybook(p)};
+document.querySelectorAll("[data-zone]").forEach(z=>{const f=()=>{const Z=ZONES[z.dataset.zone];openDrawer(`<h2>${Z.t}</h2><p>${Z.p}</p>${Z.tools.length?`<h4>Tools</h4><div class="chips">${Z.tools.map(chip).join("")}</div>`:""}${z.dataset.zone==="orch"?`<h4>Run it</h4>${cmdRow("/weekly-run")}`:""}`)};
+  z.addEventListener("click",e=>{if(e.target.closest(".card,.int,.ctl,.kf"))return;f()});z.addEventListener("keydown",e=>{if(e.key==="Enter")f()})});
+$("#klGrid").onclick=e=>{const b=e.target.closest("[data-kl]");if(!b)return;const k=KL.find(x=>x[0]===b.dataset.kl);
+  openDrawer(`<h2>${k[0]}</h2><p>Part of Brand OS, the team's shared memory. Every agent reads these files before working and writes results back.</p><p>${k[1]}</p><h4>Fill it with Claude</h4>${cmdRow(`Help me fill brand-os${k[0]}/ one question at a time`)}`)};
+document.addEventListener("click",e=>{const c=e.target.closest("[data-go]");if(!c)return;const g=c.dataset.go;
+  if(g==="kill")return setKill(!killed);
+  if(g==="queue")return $("#queuePanel").scrollIntoView({behavior:"smooth"});
+  if(g==="log")return $("#logPanel").scrollIntoView({behavior:"smooth"});
+  if(g==="owner")return $("#ownerPanel").scrollIntoView({behavior:"smooth"});
+  if(g==="perm")return openDrawer(`<h2>Permissions</h2><p>What agents may do without asking, set by your approval bar.</p><ul><li>Routine calendar posts: auto</li><li>4–5★ review replies: auto</li><li>FAQ answers in DMs: auto</li><li>Bad reviews, offers, ads, competitor mentions: <b>you</b></li><li>Anything that spends money over your cap: <b>blocked</b></li></ul><p class="hint">Edit in <code>brand-os/brand-brain/budget-and-approval.md</code></p>`);
+  if(g==="alerts")return openDrawer(`<h2>Alerts</h2><p>You get a one-sentence ping when something needs you: ${Q.pending.length} item(s) waiting now.</p><p class="hint">Choose your channel and quiet hours in <code>budget-and-approval.md</code>.</p>`)});
+
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2400)}
+
+// sample starting state (marked as examples)
+const RWT=[
+ {dept:"content",ch:"Sun 15 Nov · YouTube long video plan",text:"Next long video: A) “MANCHERIAL to LONAVALA on MT-15 🏍️ Ghats, Rain & Vada Pav | Telugu Vlog” or B) “DUBAI DAY 4 | … | Telugu Vlog”. Tell us which footage you have. Thumbnail template ready in Canva → Agent Team – Drafts.",risk:"medium"},
+ {dept:"content",ch:"Sat 14 Nov · YouTube Short",text:"“Burj Khalifa light show + Dubai Fountain at night ✨ | Telugu Vlog #Shorts”. Clip from Dubai Day 1 & 2 at 5:59. దుబాయ్ nights hit different ✨",risk:"low"},
+ {dept:"content",ch:"Fri 13 Nov · Instagram carousel",text:"Calm + adventure with the buddies ⛺🌅 Jetty ➝ speedboat ➝ tents under the stars ➝ sunrise. And yes, the goat gang showed up 🐐😂 (5 frames from Somasila)",risk:"low"},
+ {dept:"content",ch:"Thu 12 Nov · Short + Reel",text:"“Golden hour on the water in DUBAI 🌅 | Telugu Vlog #Shorts”. Day 3 in Dubai was all about the views. Sunset boat ride with the skyline lighting up.",risk:"low"},
+ {dept:"publishing",ch:"Wed 11 Nov · YouTube community poll",text:"Dubai done ✅ Somasila done ✅ Now YOU pick the next trip! Lonavala on the MT-15 🏍️ / More Dubai 🇦🇪 / Another camping weekend ⛺ / Comment 💬",risk:"low"},
+ {dept:"content",ch:"Tue 10 Nov · Instagram Reel",text:"“Inka speed ga po anna!” 😂🚤 Speedboat across the సోమశిల backwaters with the buddies, then night camping and a sunrise you have to see 🌅 Where should we go next? 👇",risk:"low"},
+ {dept:"content",ch:"Mon 9 Nov · YouTube Short",text:"“Does Hyderabadi biryani taste the same in DUBAI? 😄 | Telugu Vlog #Shorts”. First bite, verdict at the end. Clip from Dubai Day 1 & 2 at 2:16.",risk:"low"}];
+RWT.forEach(i=>addItem(i,"approved"));tab="approved";document.querySelectorAll(".qtab").forEach(x=>x.setAttribute("aria-selected",x.dataset.q==="approved"));renderQ();
+log("owner","connected Canva · brand kit kAGTPM9D8No");log("owner","voice guide rebuilt from 3 real YouTube descriptions");log("creative","Canva folder ‘Agent Team – Drafts’ + thumbnail template copy");log("orchestrator","planned week of 9 Nov · 7 drafts → queue/pending (strict bar)");log("publishing","publishing pack ready · drafts tidied");log("owner","approved all 7 drafts → queue/approved");
+</script>

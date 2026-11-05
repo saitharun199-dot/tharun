@@ -1,0 +1,1 @@
+Show me every file in queue/pending/ as a numbered list with: channel, date, risk, and the first 2 lines. Then wait for me to say which numbers to approve. Move approved ones to queue/approved/ and log it. Owner notes: $ARGUMENTS

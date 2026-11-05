@@ -1,0 +1,11 @@
+# Ad creative brief
+- **Offer:**
+- **Audience:**
+- **Hook (first 3 seconds / first line):**
+- **Image or video idea:**
+- **On-image text (max 7 words):**
+- **Primary text:**
+- **Headline:**
+- **Call to action button:**
+- **3 variations to test:** A) B) C)
+- **Budget (owner approved?):**

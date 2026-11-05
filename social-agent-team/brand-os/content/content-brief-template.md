@@ -1,0 +1,11 @@
+# Content brief
+- **Goal:** (awareness / leads / bookings)
+- **Audience persona:**
+- **Pillar:**
+- **Channel(s):**
+- **Main keyword (if any):**
+- **Key message (1 sentence):**
+- **Proof to include:**
+- **Call to action:**
+- **Deadline:**
+- **Brand OS files used:**
